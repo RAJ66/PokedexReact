@@ -1,65 +1,42 @@
-import React , { Component } from 'react';
+import React , { useState,useEffect} from 'react';
 import Axios from 'axios';
 
 import './style.css';
 
-export default class Main extends Component {
-    
-    state = {
-        arrayPokemons:[ ],
-        pagesPokemonsNext :{ },
-        pagesPokemonsPrevious:{ },
-    }
+function  Main ()  {
+    const [arrayPokemons,setArrayPokemons]= useState([ ])
+    const [pagesPokemonsNext,setPagesPokemonsNext]= useState({ })
+    const [pagesPokemonsPrevious,setPagesPokemonsPrevious]= useState({ })
 
-    componentDidMount() {
-        this.loadPokemon();
+  
+    useEffect(()=>{loadPokemon()},[])
+   
+    const loadPokemon = async (url = null) => {
+        if (url === null) {
+            const response = await Axios.get('https://pokeapi.co/api/v2/pokemon')
+        setArrayPokemons(response.data.results)
+        setPagesPokemonsNext(response.data.next)
+        setPagesPokemonsPrevious(response.data.previous)
+        } else {
+            const response = await Axios.get(url)
+        setArrayPokemons(response.data.results)
+        setPagesPokemonsNext(response.data.next)
+        setPagesPokemonsPrevious(response.data.previous)
+        }
     }
    
-    loadPokemon = async (url = null) => {
-        try{
-        const response = await Axios.get(url)
-        const arrayPokemons = response.data.results;
-        const pagesPokemonsNext = {
-            next:response.data.next,
-        }
-        const pagesPokemonsPrevious = {
-            previous:response.data.previous,
-        }
-        console.log( arrayPokemons , pagesPokemonsPrevious , pagesPokemonsNext );
-        this.setState({arrayPokemons,pagesPokemonsPrevious, pagesPokemonsNext })
-    } catch {
-        const response = await Axios.get('https://pokeapi.co/api/v2/pokemon')
-        const arrayPokemons = response.data.results;
-        const pagesPokemonsNext = {
-            next:response.data.next,
-        }
-        const pagesPokemonsPrevious = {
-            previous:response.data.previous,
-        }
-        console.log( arrayPokemons , pagesPokemonsPrevious , pagesPokemonsNext );
-        this.setState({arrayPokemons,pagesPokemonsPrevious, pagesPokemonsNext })
-    }
-    
-    }
-   
-    nextPage = () => {
-        const { pagesPokemonsNext } = this.state;
-        if(pagesPokemonsNext.next === null) return
-        const nextPage = pagesPokemonsNext.next;
-        this.loadPokemon(nextPage);
+    const nextPage = () => {
+        
+        loadPokemon(pagesPokemonsNext);
     }
 
     
-    prevPage = () => {
-        const { pagesPokemonsPrevious } = this.state;
-        if(pagesPokemonsPrevious.previous === null) return
-        const prevPage = pagesPokemonsPrevious.previous;
-        this.loadPokemon(prevPage);
+    const prevPage = () => {
+        
+        loadPokemon(pagesPokemonsPrevious);
     }
 
 
-    render() {
-        const { arrayPokemons } = this.state
         return (
             <div className='pokemon-list' >
                 {arrayPokemons.map(pokemon => (
@@ -71,11 +48,14 @@ export default class Main extends Component {
                 ))}
 
             <div className='actions'>
-                    <button onClick={this.prevPage} >Anterior</button>
-                    <button onClick={this.nextPage} >Proximo</button>
+                    <button onClick={()=>prevPage()} >Anterior</button>
+                    <button onClick={()=>nextPage()} >Proximo</button>
             </div>
 
             </div>
         )
-    }
 }
+
+
+
+export default Main;
