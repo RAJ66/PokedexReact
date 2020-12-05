@@ -10,20 +10,31 @@ function  Main ()  {
 
   
     useEffect(()=>{loadPokemon()},[])
+
+
+   const getInfo = async(data)=>{
+       return Promise.all(data.map(async(pokemon)=>{ 
+        const response = await Axios.get(pokemon.url)
+        pokemon.img =  response.data.sprites.back_default;
+        return Promise.resolve(pokemon)
+    }
+    ))
+   }
    
     const loadPokemon = async (url = null) => {
+        let response;
         if (url === null) {
-            const response = await Axios.get('https://pokeapi.co/api/v2/pokemon')
-        setArrayPokemons(response.data.results)
-        setPagesPokemonsNext(response.data.next)
-        setPagesPokemonsPrevious(response.data.previous)
+             response = await Axios.get('https://pokeapi.co/api/v2/pokemon')
         } else {
-            const response = await Axios.get(url)
-        setArrayPokemons(response.data.results)
+             response = await Axios.get(url)
+        }
+        const pokemons = response.data.results;
+            await getInfo(pokemons).then(data=>{
+                setArrayPokemons(data)})
+
         setPagesPokemonsNext(response.data.next)
         setPagesPokemonsPrevious(response.data.previous)
-        }
-    }
+           }
    
     const nextPage = () => {
         
@@ -39,13 +50,19 @@ function  Main ()  {
 
         return (
             <div className='pokemon-list' >
-                {arrayPokemons.map(pokemon => (
+                {arrayPokemons.length>0 && arrayPokemons.map(pokemon => {
+                    console.log("pokemon.img")
+                    //console.log(pokemon.img)
+                   // console.log(pokemon.name)
+
+                    return (
                     <article id={pokemon.name}>
                         <strong>
                             {pokemon.name}
                         </strong>
-                    </article>
-                ))}
+                        <img src={pokemon.img}/>
+                    </article>)}
+                )}
 
             <div className='actions'>
                     <button onClick={()=>prevPage()} >Anterior</button>
