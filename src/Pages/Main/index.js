@@ -50,19 +50,17 @@ function  Main ()  {
 
         return (
             <div className='pokemon-list' >
+                <div className='cards' >
                 {arrayPokemons.length>0 && arrayPokemons.map(pokemon => {
-                    console.log("pokemon.img")
-                    //console.log(pokemon.img)
-                   // console.log(pokemon.name)
-
                     return (
-                    <article id={pokemon.name}>
-                        <strong>
-                            {pokemon.name}
+                    <article id={pokemon.name} className="card">
+                        <strong className="card-name">
+                            {(pokemon.name).toUpperCase()}
                         </strong>
-                        <img src={pokemon.img}/>
+                        <img src={pokemon.img} className="card-img"/>
                     </article>)}
                 )}
+                </div>
 
             <div className='actions'>
                     <button onClick={()=>prevPage()} >Anterior</button>

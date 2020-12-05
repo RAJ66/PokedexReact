@@ -1,7 +1,36 @@
-.pokemon-list{
-    max-width: 700px;
-    margin: 20px auto 0;
-    padding: 0 20px;
+.cards{
+    padding-top: 30px;
+  width: 90%;
+  max-width: 980px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+}
+
+.actions{
+    padding-top: 30px;
+    width: 90%;
+    max-width: 980px;
+    margin: auto; 
+}
+
+.card{
+   border: 1px solid black;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.card .card-name{}
+
+.card .card-img{width: 200px;
+    height: 200px;
+background-color: #ddd;
+border: 1px solid #ddd;
+border-radius: 10px;
+margin-top: 20px;
 }
 
 .pokemon-list article {
