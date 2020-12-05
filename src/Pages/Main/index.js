@@ -9,7 +9,10 @@ function  Main ()  {
     const [pagesPokemonsPrevious,setPagesPokemonsPrevious]= useState({ })
 
   
-    useEffect(()=>{loadPokemon()},[])
+    useEffect(()=>{
+        loadPokemon()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
 
    const getInfo = async(data)=>{
