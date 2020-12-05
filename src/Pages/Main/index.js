@@ -60,7 +60,7 @@ function  Main ()  {
                         <strong className="card-name">
                             {(pokemon.name).toUpperCase()}
                         </strong>
-                        <img src={pokemon.img} className="card-img"/>
+                        <img src={pokemon.img} className="card-img" alt={pokemon.name}/>
                     </article>)}
                 )}
                 </div>
